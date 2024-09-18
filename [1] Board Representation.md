@@ -4,7 +4,7 @@ Here we are, the humble beginnings of my project. The first step in pretty much 
 
 _How do I want to represent my board?_
 
-![A chess board, pieces arranged in the starting position.](./Assets/1/Starting%20board.png)
+![A chess board, pieces arranged in the starting position.](./Assets/1/Starting%20Board.png)
 
 There are a number of ways to internally represent a chess board in code, and I'll go over the 3 ways people typically do this:
 1. Using a 2D array
