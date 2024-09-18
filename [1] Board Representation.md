@@ -65,7 +65,7 @@ The concept of a bitboard should be really easy to understand: it's a number whe
 
 Below is the starting position of the game of Chess:
 
-![Starting position of the game of Chess.](Assets/1/Starting%2board.png)
+![Starting position of the game of Chess.](Assets/1/Starting%20Board.png)
 
 Where are the white pawns? Well, they're on the second rank.
 
