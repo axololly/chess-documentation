@@ -59,3 +59,5 @@
     - [Linking to Three-fold Repetition]()
 
 ---
+
+- [Contributors](contributors.md)
