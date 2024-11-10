@@ -8,6 +8,9 @@
 
 # Methods
 
+- [Board Representation]()
+    - [Bitboard Representation]()
+
 - [Overview of Methods Used]()
     - [Lookup Tables]()
     - [Hashing Algorithms]()
@@ -26,6 +29,7 @@
 - [(Basic) King Moves]()
 
 - [Sliding Piece Moves]()
+    - [Magic Bitboards]()
     - [Bishop Moves]()
     - [Rook Moves]()
     - [Queen Moves]()
@@ -41,3 +45,17 @@
     - [Promotions]()
     - [En-Passant]()
 
+# A few more rules...
+
+- [Fifty-move Rule]()
+- [Insufficient Material]()
+- [Three-fold Repetition]()
+
+# Zobrist Hashing
+
+- [Storing Chess Boards]()
+    - [Explanation of Zobrist Hashing]()
+    - [Implementation of Zobrist Hashing]()
+    - [Linking to Three-fold Repetition]()
+
+---
