@@ -2,9 +2,8 @@
 
 - [What is this?](index.md)
 
-- [What is Chess?]()
-    - [Basic Movements]()
-    - [Special Movements]()
+- [What is Chess?](What_is_Chess.md)
+    - [How do the pieces move?](Movement_of_Pieces.md)
 
 # Methods
 
@@ -16,11 +15,13 @@
     - [Hashing Algorithms]()
     - [Calculating on the fly]()
 
-# Utilities
+# Layout
 
 - [Square struct]()
 - [Move struct]()
 - [MoveType enum]()
+- [PieceSet struct]()
+- [Board struct]()
 
 # Move Generation
 
@@ -28,28 +29,35 @@
 
 - [(Basic) King Moves]()
 
+- [(Basic) Pawn Moves]()
+
 - [Sliding Piece Moves]()
     - [Magic Bitboards]()
     - [Bishop Moves]()
     - [Rook Moves]()
     - [Queen Moves]()
 
-# But wait... there's more?
+# Additional Behaviours
 
-- [Additional King Behaviour]()
+- [For the King]()
     - [Castling]()
     - [Checks]()
     - [Pinned Pieces]()
 
-- [Additional Pawn Behaviour]()
+- [For the Pawns]()
     - [Promotions]()
     - [En-Passant]()
 
-# A few more rules...
+# Outside the Pieces
 
-- [Fifty-move Rule]()
-- [Insufficient Material]()
-- [Three-fold Repetition]()
+- [Half-move Clock]()
+
+- [Checkmates]()
+
+- [Draw Rules]()
+    - [Fifty-move Rule]()
+    - [Insufficient Material]()
+    - [Three-fold Repetition]()
 
 # Zobrist Hashing
 
@@ -57,6 +65,17 @@
     - [Explanation of Zobrist Hashing]()
     - [Implementation of Zobrist Hashing]()
     - [Linking to Three-fold Repetition]()
+
+# Going Further
+
+- [Chess960 Support]()
+    - [How Castling Works]()
+    - [Implementing Castling]()
+    - [Adding FEN Support]()
+
+- [PGN Support]()
+
+- [Conclusion]()
 
 ---
 

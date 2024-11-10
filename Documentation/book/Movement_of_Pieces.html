@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Chess Move Generator</title>
-        <meta name="robots" content="noindex">
+        <title>How do the pieces move? - Chess Move Generator</title>
 
 
         <!-- Custom HTML head -->
@@ -153,42 +152,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="what-is-this"><a class="header" href="#what-is-this">What is this?</a></h1>
-<p>Back, what was supposed to be a month but became 4 or 5 due to procrastination, I decided I wanted to make chess - program the full game from scratch, and be proud of it. And then, I would make an opponent that would be able to play against you, and hopefully, win every time.</p>
-<p>The first part of this journey was to program the game itself. On the <em>Chess Programming Wiki</em> (CPW), it says that the first step to programming a chess engine is to have a fully working and bug-free implementation of the full game:</p>
-<blockquote>
-<p><a href="https://www.chessprogramming.org/Getting_Started"><strong>CPW - Getting Started</strong></a></p>
-<p>The very first step to writing a chess engine is to write a complete, bug free board representation that knows every rule of chess. While this can sometimes be a pain, especially implementing the more complicated rules such as castling and repetition draws, it is the backbone of the chess engine, and your engine will not get far without it.</p>
-</blockquote>
-<p>The problem with this came when I found there were an extreme lack of resources present for this task, and it quickly became apparent that this would be pretty difficult to achieve. And a month later, it was finished. I was supposed to spend a week or so, documenting my experience, but I forgot and pushed it to the side - eventually, I forgot about it, but now I'm writing this guide so that it's just that little bit easier for anyone else who was at the start of the same path I walked.</p>
-<h2 id="about-this-project"><a class="header" href="#about-this-project">About this project</a></h2>
-<p>This project will use code written in C#, as this is what my move generator was written in, originally. Hopefully, the code should be self-explanatory, and I'll do my best to explain alongside the code samples presented throughout this book.</p>
-<p>If there are any issues, feature requests, or contributions, feel free to list them in the issues tab of this repository <a href="https://github.com/axololly/chess-documentation/issues/new">here</a>.</p>
-<p>Thank you for reading! ❤️🎉</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="what-is-chess"><a class="header" href="#what-is-chess">What is Chess?</a></h1>
-<p>Chess is a two-player board game, simulating a battle between two kingdoms, where both players take turns moving pieces on the board with the objective of putting their opponent's king in a position where they have no escape and will be taken on the following move. It is one of the oldest and most popular games to date, with one of the first openings being the <a href="https://en.wikipedia.org/wiki/Ponziani_Opening">Ponziani Opening</a>, having been first discussed in chess literature no later than 1497.</p>
-<p>The game takes place on an 8-by-8 board where each player controls 16 pieces, arranged as seen below:</p>
-<p><img src="img/starting-board.png" alt="A chess board, all the pieces arranged in the starting position." /></p>
-<h3 id="vocabulary-about-chess-boards"><a class="header" href="#vocabulary-about-chess-boards">Vocabulary about Chess Boards</a></h3>
-<p>Before I give an overview of all the pieces and their behaviour, note these terms about chess boards:</p>
-<ol>
-<li>
-<p><strong>file</strong>: <em>a vertical line of squares on the board.</em></p>
-<ul>
-<li>The furthest on the left is labelled file A,</li>
-<li>The furthest on the right is labelled file H.</li>
-</ul>
-</li>
-<li>
-<p><strong>rank</strong>: <em>a horizontal line of squares on the board.</em></p>
-<ul>
-<li>The closest to White's perspective is labelled rank 1</li>
-<li>The furthest from White's perspective is labelled rank 8.</li>
-</ul>
-</li>
-</ol>
-<p>Squares are also represented as <code>[file][rank]</code>, so <code>e4</code> means 5th file and 4th rank.The 5 comes from 'e' being the 5th letter of the alphabet.</p>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="rooks"><a class="header" href="#rooks">Rooks</a></h2>
+                        <h2 id="rooks"><a class="header" href="#rooks">Rooks</a></h2>
 <p>Rooks are the castle-looking pieces, and can usually be found in all four corners of the board, when pieces are arranged in the starting position:</p>
 <p><img src="img/pieces/white-rook.png" alt="A white rook." /> <img src="img/pieces/black-rook.png" alt="A black rook." /></p>
 <p>They move orthogonally (horizontally and vertically) in all four directions for as many squares as possible, only stopped by another piece on the board, as you can see below:</p>
@@ -271,17 +235,18 @@
 <p>If Black chooses to move his king, instead of capturing White's pawn through en-passant, Black <strong>cannot</strong> play en-passant on their next turn.</p>
 <hr />
 <p>Those are all of the movements of all the pieces in Chess. Let me know if my guide was useful, or where it can be improved, by filing an issue <a href="https://github.com/axololly/chess-documentation/issues/new">here</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="contributors"><a class="header" href="#contributors">Contributors</a></h1>
-<p>Here is a list of names, GitHub accounts and ways people have helped me to complete this project:</p>
-<blockquote>
-<p>Nothing to see here. Not yet, at least.</p>
-</blockquote>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="What_is_Chess.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="contributors.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -289,7 +254,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="What_is_Chess.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="contributors.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -312,11 +283,6 @@
 
         <!-- Custom JS scripts -->
 
-        <script>
-        window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
-        });
-        </script>
 
     </div>
     </body>

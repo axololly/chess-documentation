@@ -16,4 +16,4 @@ This project will use code written in C#, as this is what my move generator was 
 
 If there are any issues, feature requests, or contributions, feel free to list them in the issues tab of this repository [here](https://github.com/axololly/chess-documentation/issues/new).
 
-Thank you for reading! :heart: :tada:
+Thank you for reading! ❤️🎉
