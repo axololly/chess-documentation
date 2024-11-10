@@ -2,5 +2,5 @@
 authors = ["axololly"]
 language = "en"
 multilingual = false
-src = "Documentation\\src"
+src = "Documentation"
 title = "Chess Move Generator"
