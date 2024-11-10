@@ -1,8 +1,6 @@
 # Summary
 
-- [Test Intro File](./intro.md)
-
-# Backstory
+- [What is this?](index.md)
 
 - [What is Chess?]()
     - [Basic Movements]()
