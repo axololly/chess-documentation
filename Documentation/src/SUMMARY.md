@@ -1,5 +1,7 @@
 # Summary
 
+- [Test Intro File](./intro.md)
+
 # Backstory
 
 - [What is Chess?]()
