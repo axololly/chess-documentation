@@ -1,9 +1,0 @@
-[book]
-authors = ["axololly"]
-language = "en"
-multilingual = false
-src = "Documentation/src"
-title = "Chess Move Generator"
-
-git-repository-url = "https://github.com/axololly/chess-documentation/"
-git-repository-icon = "fa-github"

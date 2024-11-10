@@ -1,9 +1,9 @@
 # Summary
 
-- [Introduction](/Documentation/src/intro.md)
+- [Introduction](./intro.md)
 
-- [Board Representation](/Documentation/src/1.md)
+- [Board Representation](./1.md)
 
 # Move Gen
 
-- [Another File](/Documentation/src/2.md)
+- [Another File](./2.md)
