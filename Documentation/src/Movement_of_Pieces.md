@@ -84,8 +84,6 @@ Then moving the rook to the square the king passed over:
 
 This is usually a defensive move that is played in the opening.
 
-### Castling Requirements
-
 Castling can only be performed if certain requirements are all met:
 
 1. There are no pieces between the king and the rook being castled with.
@@ -145,11 +143,17 @@ White moves their pawn two squares to e4:
 
 Black now has the opportunity for en-passant:
 
-![Black captures the pawn through en-passant.](img/movement/pawn-7.png)
+![Before Black captures the pawn through en-passant.](img/movement/pawn-7.png)
+
+And this is what it looks like after Black plays the en-passant move:
+
+![After Black captured the pawn through en-passant.](img/movement/pawn-9.png)
 
 This move is the same as if the pawn moved one square forward for its turn instead of two:
 
 ![Capturing as if the pawn moved one square instead of two.](img/movement/pawn-8.png)
+
+The pawn will end up in the same position.
 
 If Black chooses to move his king, instead of capturing White's pawn through en-passant, Black **cannot** play en-passant on their next turn.
 

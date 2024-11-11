@@ -7,7 +7,7 @@
 
 # Methods
 
-- [Board Representation]()
+- [Board Representation](Board_Representation.md)
     - [Bitboard Representation]()
 
 - [Overview of Methods Used]()
@@ -66,6 +66,12 @@
     - [Implementation of Zobrist Hashing]()
     - [Linking to Three-fold Repetition]()
 
+# Perft Testing
+
+- [What is Perft?]()
+- [Implementing Perft]()
+- [Comparing Perft Results]()
+
 # Going Further
 
 - [Chess960 Support]()
@@ -79,4 +85,4 @@
 
 ---
 
-- [Contributors](contributors.md)
+- [Contributors](Contributors.md)

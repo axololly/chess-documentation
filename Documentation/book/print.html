@@ -188,6 +188,8 @@
 </li>
 </ol>
 <p>Squares are also represented as <code>[file][rank]</code>, so <code>e4</code> means 5th file and 4th rank.The 5 comes from 'e' being the 5th letter of the alphabet.</p>
+<p>For example, in the diagram below, the square highlighted with red is F3, and the square highlighted with green is B5:</p>
+<p><img src="img/square-indexing.png" alt="A chess board with file and rank indexing with some squares highlighted." /></p>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="rooks"><a class="header" href="#rooks">Rooks</a></h2>
 <p>Rooks are the castle-looking pieces, and can usually be found in all four corners of the board, when pieces are arranged in the starting position:</p>
 <p><img src="img/pieces/white-rook.png" alt="A white rook." /> <img src="img/pieces/black-rook.png" alt="A black rook." /></p>
@@ -231,7 +233,6 @@
 <p>Then moving the rook to the square the king passed over:</p>
 <p><img src="img/movement/king-5.png" alt="The second part of castling, done on the queen&#39;s side of the board." /></p>
 <p>This is usually a defensive move that is played in the opening.</p>
-<h3 id="castling-requirements"><a class="header" href="#castling-requirements">Castling Requirements</a></h3>
 <p>Castling can only be performed if certain requirements are all met:</p>
 <ol>
 <li>There are no pieces between the king and the rook being castled with.</li>
@@ -265,17 +266,115 @@
 <p>White moves their pawn two squares to e4:</p>
 <p><img src="img/movement/pawn-6.png" alt="After the move 1. e4" /></p>
 <p>Black now has the opportunity for en-passant:</p>
-<p><img src="img/movement/pawn-7.png" alt="Black captures the pawn through en-passant." /></p>
+<p><img src="img/movement/pawn-7.png" alt="Before Black captures the pawn through en-passant." /></p>
+<p>And this is what it looks like after Black plays the en-passant move:</p>
+<p><img src="img/movement/pawn-9.png" alt="After Black captured the pawn through en-passant." /></p>
 <p>This move is the same as if the pawn moved one square forward for its turn instead of two:</p>
 <p><img src="img/movement/pawn-8.png" alt="Capturing as if the pawn moved one square instead of two." /></p>
+<p>The pawn will end up in the same position.</p>
 <p>If Black chooses to move his king, instead of capturing White's pawn through en-passant, Black <strong>cannot</strong> play en-passant on their next turn.</p>
 <hr />
 <p>Those are all of the movements of all the pieces in Chess. Let me know if my guide was useful, or where it can be improved, by filing an issue <a href="https://github.com/axololly/chess-documentation/issues/new">here</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="board-representation"><a class="header" href="#board-representation">Board Representation</a></h1>
+<p>So, now that you're familiar with the game of Chess, let's take a look again at what a chess board looks like.</p>
+<p><img src="img/starting-board.png" alt="A chess board, pieces arranged in the starting position." /></p>
+<p>Unfortunately, it's not really practical to just store a picture of the board in memory, so we need to come up with a more clever solution to representing this chess board.</p>
+<h2 id="mailbox"><a class="header" href="#mailbox">Mailbox</a></h2>
+<p>The first method to representing the pieces on a chess board is what the chess world calls a "mailbox", which is an array of values representing all the different possible states a square can be. This can be a 1D or 2D array and usually consists of a <code>Piece</code> enum of all 13 states: 12 pieces and a final enum for an empty square.</p>
+<pre><code class="language-cs">public enum Piece
+{
+    WhitePawn,    BlackPawn,
+    WhiteKnight,  BlackKnight,
+    WhiteBishop,  BlackBishop,
+    WhiteRook,    BlackRook,
+    WhiteQueen,   BlackQueen,
+    WhiteKing,    BlackKing,
+    
+    Empty
+}
+</code></pre>
+<p>They can be in any order, but having an order like the example shown allows you to get the type of a piece using a right-shift of 1, and the colour of a piece using a bitwise AND of 1.</p>
+<h3 id="using-a-1d-array"><a class="header" href="#using-a-1d-array">Using a 1D Array</a></h3>
+<p>Then, we can just initiate the mailbox:</p>
+<pre><code class="language-cs">Piece[] Mailbox = new Piece[64];
+</code></pre>
+<p>However, there is a problem: when you initiate an array of enums in C#, it fills it with zeroes or the zero-equivalent of the enum (the enum attribute with a value of 0). With the way, we've initiated it, because <code>Piece.WhitePawn</code> is the zero-equivalent enum, it will fill the array with a bunch of white pawns on all the squares.</p>
+<p>So, if you were to display the board state, it would look like this:</p>
+<p><img src="img/white-pawns-everywhere.png" alt="Pawns everywhere. Absolute chaos." /></p>
+<p>This is clearly not what an empty board looks like, so we have to correct it by filling the array with the equivalent of empty squares: <code>Piece.Empty</code>:</p>
+<pre><code class="language-cs">Array.Fill(Mailbox, Piece.Empty);
+</code></pre>
+<p>And now, if we display our board, we get a blank board:</p>
+<p><img src="img/empty-board.png" alt="No more pawns!" /></p>
+<p>Never has nothing been so appealing.</p>
+<h3 id="using-a-2d-array"><a class="header" href="#using-a-2d-array">Using a 2D array</a></h3>
+<p>Again, using a 2D array is much like the 1D array: you initiate the array:</p>
+<pre><code class="language-cs">Piece[,] Mailbox2D = new Piece[8, 8];
+</code></pre>
+<p>Then fill it with pieces:</p>
+<pre><code class="language-cs">for (int i = 0; i &lt; 8; i++)
+{
+    for (int j = 0; j &lt; 8; j++)
+    {
+        Mailbox2D[i, j] = Piece.Empty();
+    }
+}
+</code></pre>
+<p>There isn't really much else to say, other than 2D arrays are slower than a 1D array and that you would have to split a single index into two indexes with a division and modulus.</p>
+<h2 id="applying-a-mailbox"><a class="header" href="#applying-a-mailbox">Applying a Mailbox</a></h2>
+<p>Say we had the following position:</p>
+<p><img src="img/find-bishop-moves.png" alt="Example opening. I couldn&#39;t find the name online." /></p>
+<p>And we wanted to know the moves of the bishop on f1. How would we go about this?</p>
+<p>Well, our mailbox looks something like this:</p>
+<pre><code class="language-yml">[
+    r, -, b, q, k, b, n, r,
+    p, p, p, p, -, p, p, p,
+    -, -, n, -, -, -, -, -,
+    -, -, -, -, p, -, -, -,
+    -, -, -, -, P, -, -, -,
+    -, -, -, -, -, N, -, -,
+    P, P, P, P, -, P, P, P,
+    R, N, B, Q, K, B, -, R
+]
+</code></pre>
+<p>And these are the indexes of the array:</p>
+<pre><code class="language-yml">[
+     0,  1,  2,  3,  4,  5,  6,  7,
+     8,  9, 10, 11, 12, 13, 14, 15,
+    16, 17, 18, 19, 20, 21, 22, 23,
+    24, 25, 26, 27, 28, 29, 30, 31,
+    32, 33, 34, 35, 36, 37, 38, 39,
+    40, 41, 42, 43, 44, 45, 46, 47,
+    48, 49, 50, 51, 52, 53, 54, 55,
+    56, 57, 58, 59, 60, 61, 62, 63
+]
+</code></pre>
+<p>We can check from the square the bishop is on with the indexes and we see it's on square 61.</p>
+<p>Now, the question comes: how do we move diagonally?</p>
+<p>Well, if you take any square, you'll see that to move left and right is to add or subtract 1, or, more appropriately speaking, apply an offset of 1 or -1. And to move up and down, we apply an offset of 8 for down and -8 for up. The same goes for diagonals, with all offsets shown below:</p>
+<pre><code class="language-yml">NW N NE       -9  -8  -7
+W  .  E   =&gt;  -1   .   1
+SW S SE        7   8   9
+</code></pre>
+<p>Bishops move diagonally, which are the offsets <code>-9</code>, <code>-7</code>, <code>7</code>, and <code>9</code>. We can package these in an array, then iterate through them when we check for all the moves:</p>
+<pre><code class="language-cs">
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="contributors"><a class="header" href="#contributors">Contributors</a></h1>
 <p>Here is a list of names, GitHub accounts and ways people have helped me to complete this project:</p>
-<blockquote>
-<p>Nothing to see here. Not yet, at least.</p>
-</blockquote>
+<ol>
+<li>
+<p><a href="https://github.com/tsoj"><code>tsoj</code></a> for:</p>
+<ul>
+<li>providing decent advice on my first few pages like design choices.</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/Adam-Kulju"><code>vgp</code></a> for:</p>
+<ul>
+<li>suggesting I add a section on perft.</li>
+</ul>
+</li>
+</ol>
 
                     </main>
 

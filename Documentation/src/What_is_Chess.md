@@ -19,3 +19,7 @@ Before I give an overview of all the pieces and their behaviour, note these term
     - The furthest from White's perspective is labelled rank 8.
 
 Squares are also represented as `[file][rank]`, so `e4` means 5th file and 4th rank.The 5 comes from 'e' being the 5th letter of the alphabet.
+
+For example, in the diagram below, the square highlighted with red is F3, and the square highlighted with green is B5:
+
+![A chess board with file and rank indexing with some squares highlighted.](img/square-indexing.png)
