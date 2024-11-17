@@ -8,7 +8,7 @@
 # Methods
 
 - [Board Representation](Board_Representation.md)
-    - [Bitboard Representation]()
+    - [Bitboard Representation](Bitboard_Representation.md)
 
 - [Overview of Methods Used]()
     - [Lookup Tables]()
@@ -21,6 +21,7 @@
 - [Move struct]()
 - [MoveType enum]()
 - [PieceSet struct]()
+- [Piece enum]()
 - [Board struct]()
 
 # Move Generation

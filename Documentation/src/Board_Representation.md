@@ -28,12 +28,12 @@ They can be in any order, but having an order like the example shown allows you 
 
 ### Using a 1D Array
 
-Then, we can just initiate the mailbox:
+Using a 1D array, this is how we initiate the array:
 ```cs
 Piece[] Mailbox = new Piece[64];
 ```
 
-However, there is a problem: when you initiate an array of enums in C#, it fills it with zeroes or the zero-equivalent of the enum (the enum attribute with a value of 0). With the way, we've initiated it, because `Piece.WhitePawn` is the zero-equivalent enum, it will fill the array with a bunch of white pawns on all the squares.
+However, there is a problem: when you initiate an array of enums in C#, it fills it with zeroes or the zero-equivalent of the enum (the enum attribute with a value of 0) for integer types. With the way, we've initiated it, because `Piece.WhitePawn` is the zero-equivalent enum, it will fill the array with a bunch of white pawns on all the squares.
 
 So, if you were to display the board state, it would look like this:
 
@@ -70,58 +70,48 @@ for (int i = 0; i < 8; i++)
 }
 ```
 
-There isn't really much else to say, other than 2D arrays are slower than a 1D array and that you would have to split a single index into two indexes with a division and modulus.
+There isn't really much else to say, other than 2D arrays are slower than a 1D array and that you would have to split a single index into two indexes with a division and modulus. Although, it is more intuitive because the board is an 8x8 grid, so it makes sense to store it in an 8x8 "memory grid", otherwise known as a 2D array.
 
-## Applying a Mailbox
+However, there's a much better option that removes the need for anything to do with arrays: bitboards.
 
-Say we had the following position:
+## Using Bitboards - The Best Option
 
-![Example opening. I couldn't find the name online.](img/find-bishop-moves.png)
+The term "bitboard" refers to a number where the bits in its binary representation encode information about a game board's state. In English, that's basically a binary number where the bits represent something about the board. In the context of Chess, this could be lines of attack, pieces on the board, where you can and cannot castle, etc. Bitboards are typically used when there are two states for something: it's there, and it's not.
 
-And we wanted to know the moves of the bishop on f1. How would we go about this?
+For example, take this position here:
 
-Well, our mailbox looks something like this:
-```yml
-[
-    r, -, b, q, k, b, n, r,
-    p, p, p, p, -, p, p, p,
-    -, -, n, -, -, -, -, -,
-    -, -, -, -, p, -, -, -,
-    -, -, -, -, P, -, -, -,
-    -, -, -, -, -, N, -, -,
-    P, P, P, P, -, P, P, P,
-    R, N, B, Q, K, B, -, R
-]
-```
+![An example position.](img/example-position.png)
 
-And these are the indexes of the array:
-```yml
-[
-     0,  1,  2,  3,  4,  5,  6,  7,
-     8,  9, 10, 11, 12, 13, 14, 15,
-    16, 17, 18, 19, 20, 21, 22, 23,
-    24, 25, 26, 27, 28, 29, 30, 31,
-    32, 33, 34, 35, 36, 37, 38, 39,
-    40, 41, 42, 43, 44, 45, 46, 47,
-    48, 49, 50, 51, 52, 53, 54, 55,
-    56, 57, 58, 59, 60, 61, 62, 63
-]
-```
+If I asked you where all of White's piece are, you'd probably describe something that amounts to this:
 
-We can check from the square the bishop is on with the indexes and we see it's on square 61.
+![The same position, just with all of White's pieces highlighted.](img/example-position-white-pieces-labelled.png)
 
-Now, the question comes: how do we move diagonally?
-
-Well, if you take any square, you'll see that to move left and right is to add or subtract 1, or, more appropriately speaking, apply an offset of 1 or -1. And to move up and down, we apply an offset of 8 for down and -8 for up. The same goes for diagonals, with all offsets shown below:
+On each square, there can either be a white piece, or there can't be. If we assign 1 to "there **is** a piece here", and 0 to "there **isn't** a piece here", we get something like this:
 
 ```yml
-NW N NE       -9  -8  -7
-W  .  E   =>  -1   .   1
-SW S SE        7   8   9
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+0 0 1 0 0 0 0 0
+0 1 0 1 0 0 0 1
+1 0 0 1 0 0 1 0
+0 0 0 0 0 1 0 0
+0 0 0 0 0 1 0 0
 ```
 
-Bishops move diagonally, which are the offsets `-9`, `-7`, `7`, and `9`. We can package these in an array, then iterate through them when we check for all the moves:
+A grid of zeroes and ones representing where all of White's pieces are. With these zeroes and ones, we can pack them with binary:
 
-```cs
-
+```yml
+#  8th row, 7th row, 6th row, you get the point...
+0b 00000000 00000000 00000000 00100000 01010001 10010010 00000100 00000100
 ```
+
+### Computer Architecture
+
+Another benefit to our binary approach is the fact that pretty much all CPU's have architecture that lets them operate on data in 64-bit chunks at a time with _incredible_ speed. As in multiple billions of times a second, incredible speed. We can leverage this by using bitboards for our Chess game, as we can unlock ridiculously fast speeds with this method.
+
+## My Decision - and Everyone Else's
+
+The consensus in the Stockfish Discord server is that the best approach is a bitboard implementation **combined** with a 1-dimensional array, which serves as our mailbox. You might be wondering, considering what I said earlier, "Why are we using an array if bitboards are quicker?" It's because, this time, it's not used for move generation - it's used for piece lookup. We keep an array of 64 "pieces" that let us know what's on a given square. This is useful, because if you wanted to know what piece was on `A1`, you only have to access the part of an array that `A1` points to, instead of going through all the bitboards and checking to see if any of the bits intersect.
+
+For information on how I implemented my bitboards (and how I show them here), [turn to the following page.](./Bitboard_Representation.md)

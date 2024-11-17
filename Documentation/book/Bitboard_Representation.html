@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Board Representation - Chess Move Generator</title>
+        <title>Bitboard Representation - Chess Move Generator</title>
 
 
         <!-- Custom HTML head -->
@@ -152,88 +152,18 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="board-representation"><a class="header" href="#board-representation">Board Representation</a></h1>
-<p>So, now that you're familiar with the game of Chess, let's take a look again at what a chess board looks like.</p>
-<p><img src="img/starting-board.png" alt="A chess board, pieces arranged in the starting position." /></p>
-<p>Unfortunately, it's not really practical to just store a picture of the board in memory, so we need to come up with a more clever solution to representing this chess board.</p>
-<h2 id="mailbox"><a class="header" href="#mailbox">Mailbox</a></h2>
-<p>The first method to representing the pieces on a chess board is what the chess world calls a "mailbox", which is an array of values representing all the different possible states a square can be. This can be a 1D or 2D array and usually consists of a <code>Piece</code> enum of all 13 states: 12 pieces and a final enum for an empty square.</p>
-<pre><code class="language-cs">public enum Piece
-{
-    WhitePawn,    BlackPawn,
-    WhiteKnight,  BlackKnight,
-    WhiteBishop,  BlackBishop,
-    WhiteRook,    BlackRook,
-    WhiteQueen,   BlackQueen,
-    WhiteKing,    BlackKing,
-    
-    Empty
-}
-</code></pre>
-<p>They can be in any order, but having an order like the example shown allows you to get the type of a piece using a right-shift of 1, and the colour of a piece using a bitwise AND of 1.</p>
-<h3 id="using-a-1d-array"><a class="header" href="#using-a-1d-array">Using a 1D Array</a></h3>
-<p>Using a 1D array, this is how we initiate the array:</p>
-<pre><code class="language-cs">Piece[] Mailbox = new Piece[64];
-</code></pre>
-<p>However, there is a problem: when you initiate an array of enums in C#, it fills it with zeroes or the zero-equivalent of the enum (the enum attribute with a value of 0) for integer types. With the way, we've initiated it, because <code>Piece.WhitePawn</code> is the zero-equivalent enum, it will fill the array with a bunch of white pawns on all the squares.</p>
-<p>So, if you were to display the board state, it would look like this:</p>
-<p><img src="img/white-pawns-everywhere.png" alt="Pawns everywhere. Absolute chaos." /></p>
-<p>This is clearly not what an empty board looks like, so we have to correct it by filling the array with the equivalent of empty squares: <code>Piece.Empty</code>:</p>
-<pre><code class="language-cs">Array.Fill(Mailbox, Piece.Empty);
-</code></pre>
-<p>And now, if we display our board, we get a blank board:</p>
-<p><img src="img/empty-board.png" alt="No more pawns!" /></p>
-<p>Never has nothing been so appealing.</p>
-<h3 id="using-a-2d-array"><a class="header" href="#using-a-2d-array">Using a 2D array</a></h3>
-<p>Again, using a 2D array is much like the 1D array: you initiate the array:</p>
-<pre><code class="language-cs">Piece[,] Mailbox2D = new Piece[8, 8];
-</code></pre>
-<p>Then fill it with pieces:</p>
-<pre><code class="language-cs">for (int i = 0; i &lt; 8; i++)
-{
-    for (int j = 0; j &lt; 8; j++)
-    {
-        Mailbox2D[i, j] = Piece.Empty();
-    }
-}
-</code></pre>
-<p>There isn't really much else to say, other than 2D arrays are slower than a 1D array and that you would have to split a single index into two indexes with a division and modulus. Although, it is more intuitive because the board is an 8x8 grid, so it makes sense to store it in an 8x8 "memory grid", otherwise known as a 2D array.</p>
-<p>However, there's a much better option that removes the need for anything to do with arrays: bitboards.</p>
-<h2 id="using-bitboards---the-best-option"><a class="header" href="#using-bitboards---the-best-option">Using Bitboards - The Best Option</a></h2>
-<p>The term "bitboard" refers to a number where the bits in its binary representation encode information about a game board's state. In English, that's basically a binary number where the bits represent something about the board. In the context of Chess, this could be lines of attack, pieces on the board, where you can and cannot castle, etc. Bitboards are typically used when there are two states for something: it's there, and it's not.</p>
-<p>For example, take this position here:</p>
-<p><img src="img/example-position.png" alt="An example position." /></p>
-<p>If I asked you where all of White's piece are, you'd probably describe something that amounts to this:</p>
-<p><img src="img/example-position-white-pieces-labelled.png" alt="The same position, just with all of White&#39;s pieces highlighted." /></p>
-<p>On each square, there can either be a white piece, or there can't be. If we assign 1 to "there <strong>is</strong> a piece here", and 0 to "there <strong>isn't</strong> a piece here", we get something like this:</p>
-<pre><code class="language-yml">0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 1 0 0 0 0 0
-0 1 0 1 0 0 0 1
-1 0 0 1 0 0 1 0
-0 0 0 0 0 1 0 0
-0 0 0 0 0 1 0 0
-</code></pre>
-<p>A grid of zeroes and ones representing where all of White's pieces are. With these zeroes and ones, we can pack them with binary:</p>
-<pre><code class="language-yml">#  8th row, 7th row, 6th row, you get the point...
-0b 00000000 00000000 00000000 00100000 01010001 10010010 00000100 00000100
-</code></pre>
-<h3 id="computer-architecture"><a class="header" href="#computer-architecture">Computer Architecture</a></h3>
-<p>Another benefit to our binary approach is the fact that pretty much all CPU's have architecture that lets them operate on data in 64-bit chunks at a time with <em>incredible</em> speed. As in multiple billions of times a second, incredible speed. We can leverage this by using bitboards for our Chess game, as we can unlock ridiculously fast speeds with this method.</p>
-<h2 id="my-decision---and-everyone-elses"><a class="header" href="#my-decision---and-everyone-elses">My Decision - and Everyone Else's</a></h2>
-<p>The consensus in the Stockfish Discord server is that the best approach is a bitboard implementation <strong>combined</strong> with a 1-dimensional array, which serves as our mailbox. You might be wondering, considering what I said earlier, "Why are we using an array if bitboards are quicker?" It's because, this time, it's not used for move generation - it's used for piece lookup. We keep an array of 64 "pieces" that let us know what's on a given square. This is useful, because if you wanted to know what piece was on <code>A1</code>, you only have to access the part of an array that <code>A1</code> points to, instead of going through all the bitboards and checking to see if any of the bits intersect.</p>
-<p>For information on how I implemented my bitboards (and how I show them here), <a href="./Bitboard_Representation.html">turn to the following page.</a></p>
+                        <h1 id="bitboard-representation"><a class="header" href="#bitboard-representation">Bitboard Representation</a></h1>
+<p>This section is under construction... ⚠️</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="Movement_of_Pieces.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="Board_Representation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="Bitboard_Representation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="Contributors.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -243,11 +173,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="Movement_of_Pieces.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="Board_Representation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="Bitboard_Representation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="Contributors.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
